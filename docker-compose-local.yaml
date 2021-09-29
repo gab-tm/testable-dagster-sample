@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  postgresql:
+    image: postgres:11
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "local_postgres_user"
+      POSTGRES_PASSWORD: "local_postgres_password"
+      POSTGRES_DB: "local_postgres_db"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - docker_network
+  dumb_password_generator_pipelines:
+    build:
+      context: .
+      dockerfile: Dockerfile-pipelines
+    container_name: dumb_password_generator_pipelines
+    expose:
+      - "4000"
+    ports:
+      - "4000:4000"
+    environment:
+      POSTGRESQL_USERNAME: "local_postgres_user"
+      POSTGRESQL_PASSWORD: "local_postgres_password"
+      POSTGRESQL_DB_NAME: "local_postgres_db"
+      POSTGRESQL_IP: "postgresql"
+      POSTGRESQL_PORT: 5432
+    networks:
+      - docker_network
+    depends_on:
+      - postgresql
+  dagit:
+    build:
+      context: .
+      dockerfile: Dockerfile-dagster
+    command: dagit --host 0.0.0.0 --port 3000 -w workspace.yaml
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    container_name: dagit
+    environment:
+      POSTGRESQL_USERNAME: "local_postgres_user"
+      POSTGRESQL_PASSWORD: "local_postgres_password"
+      POSTGRESQL_DB_NAME: "local_postgres_db"
+      POSTGRESQL_IP: "postgresql"
+      POSTGRESQL_PORT: 5432
+    networks:
+      - docker_network
+    depends_on:
+      - postgresql
+      - dumb_password_generator_pipelines
+  daemon:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-dagster
+    command: dagster-daemon run
+    container_name: daemon
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      POSTGRESQL_USERNAME: "local_postgres_user"
+      POSTGRESQL_PASSWORD: "local_postgres_password"
+      POSTGRESQL_DB_NAME: "local_postgres_db"
+      POSTGRESQL_IP: "postgresql"
+      POSTGRESQL_PORT: 5432
+    networks:
+      - docker_network
+    depends_on:
+      - postgresql
+      - dumb_password_generator_pipelines
+volumes:
+  pgdata:
+    driver: local
+networks:
+  docker_network:
+    driver: bridge
+    name: docker_network

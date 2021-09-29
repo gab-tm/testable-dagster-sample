@@ -1,0 +1,7 @@
+# load_from:
+#   - python_package: cool_beans
+load_from:
+  - grpc_server:
+      host: dumb_password_generator_pipelines
+      port: 4000
+      location_name: dumb_password_generator_pipelines

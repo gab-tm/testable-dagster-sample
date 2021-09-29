@@ -1,0 +1,5 @@
+dagster==0.12.11
+dagit==0.12.11
+dagster-postgres==0.12.11
+dagster-docker==0.12.11
+essential-generators==1.0
