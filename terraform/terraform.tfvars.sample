@@ -1,0 +1,12 @@
+google_project = "<gcp_project>"
+service_account_name = "<service_account>"
+network_name = "dagster-network"
+dagster_name = "dagster"
+dagster_tags = []
+cloud_sql_name = "dagster_postgres"
+gcp_service_list = [
+    "servicenetworking.googleapis.com",  # Service Networking API,
+    "sqladmin.googleapis.com",  # Cloud SQL Admin API,
+    "drive.googleapis.com"  # Google Drive API (optional)
+]
+cloud_sql_password = <RANDOMLY GENERATED PASSWORD>
