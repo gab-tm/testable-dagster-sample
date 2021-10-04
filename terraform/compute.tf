@@ -25,7 +25,7 @@ resource "google_compute_instance" "testable_dagster" {
   }
 
   service_account {
-    # email  = module.waze_pipeline_service_account.email
+    email  = module.testable_dagster_service_account.email
     scopes = ["cloud-platform", "https://www.googleapis.com/auth/drive.readonly"]
   }
 }
