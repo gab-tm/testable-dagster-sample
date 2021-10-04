@@ -17,7 +17,7 @@ resource "google_compute_firewall" "testable_dagster_iap" {
 
   allow {
     protocol = "tcp"
-    ports    = ["22", "8080"]
+    ports    = ["22", "8080", "3000"]
   }
 
   source_ranges           = ["35.235.240.0/20"]
