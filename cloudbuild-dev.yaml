@@ -1,0 +1,51 @@
+steps:
+  - id: build-dagster
+    waitFor: ["-"]
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+    - "--context=dir:///workspace"
+    - "--dockerfile=Dockerfile-dagster-dev"
+    - "--destination=gcr.io/tm-dw-sandbox/dagster"
+    - "--cache=true"
+
+  - id: build-pipelines
+    waitFor: ["-"]
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+    - "--context=dir:///workspace"
+    - "--dockerfile=Dockerfile-pipelines-dev"
+    - "--destination=gcr.io/tm-dw-sandbox/dagster-pipelines"
+    - "--cache=true"
+
+  - id: build-dagster-compose
+    waitFor: ["build-dagster", "build-pipelines"]
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+      - "--dockerfile=Dockerfile-compose"
+      - "--context=dir:///workspace"
+      - "--destination=us.gcr.io/tm-dw-sandbox/dagster-compose"
+      - "--cache=true"
+- id: deploy-dagster
+  waitFor: ['build-dagster', 'build-pipelines', 'build-dagster-compose']
+  name: gcr.io/cloud-builders/gcloud
+  args:
+  - compute
+  - ssh
+  - '--zone=us-central1-a'
+  - '--ssh-key-expire-after=5m'
+  - 'dagster@testable-dagster'
+  - '--'
+  - |
+    sudo usermod -aG docker $$USER
+    docker-credential-gcr configure-docker
+    docker pull gcr.io/$PROJECT_ID/dagster
+    docker pull gcr.io/$PROJECT_ID/dagster-pipelines
+    docker pull gcr.io/$PROJECT_ID/dagster-compose
+    docker run --rm \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      --env PROJECT_ID=$PROJECT_ID \
+      --env CLOUD_SQL_INSTANCE=$_CLOUD_SQL_INSTANCE \
+      --env CLOUD_SQL_USERNAME=$_CLOUD_SQL_USERNAME \
+      --env CLOUD_SQL_PASSWORD=$_CLOUD_SQL_PASSWORD \
+      --env CLOUD_SQL_DATABASE=$_CLOUD_SQL_DATABASE
+      us.gcr.io/$PROJECT_ID/airflow-compose-dev

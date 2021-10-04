@@ -1,0 +1,50 @@
+telemetry:
+  enabled: false
+
+run_storage:
+  module: dagster_postgres.run_storage
+  class: PostgresRunStorage
+  config:
+    postgres_db:
+      username:
+        env: CLOUD_SQL_USERNAME
+      password:
+        env: CLOUD_SQL_PASSWORD
+      hostname:
+        env: CLOUD_SQL_HOST
+      db_name:
+        env: CLOUD_SQL_DB_NAME
+      port:
+        env: CLOUD_SQL_PORT
+
+event_log_storage:
+  module: dagster_postgres.event_log
+  class: PostgresEventLogStorage
+  config:
+    postgres_db:
+      username:
+        env: CLOUD_SQL_USERNAME
+      password:
+        env: CLOUD_SQL_PASSWORD
+      hostname:
+        env: CLOUD_SQL_HOST
+      db_name:
+        env: CLOUD_SQL_DB_NAME
+      port:
+        env: CLOUD_SQL_PORT
+
+schedule_storage:
+  module: dagster_postgres.schedule_storage
+  class: PostgresScheduleStorage
+  config:
+    postgres_db:
+      username:
+        env: CLOUD_SQL_USERNAME
+      password:
+        env: CLOUD_SQL_PASSWORD
+      hostname:
+        env: CLOUD_SQL_HOST
+      db_name:
+        env: CLOUD_SQL_DB_NAME
+      port:
+        env: CLOUD_SQL_PORT

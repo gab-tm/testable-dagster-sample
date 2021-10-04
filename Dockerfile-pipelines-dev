@@ -1,0 +1,20 @@
+FROM python:3.7-slim
+
+RUN apt-get update
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip wheel setuptools
+
+RUN pip install -r requirements.txt
+
+ENV DAGSTER_HOME=/opt/dagster/dagster_home
+RUN mkdir -p $DAGSTER_HOME
+COPY cool-beans/cool_beans/dagster-dev.yaml $DAGSTER_HOME/dagster.yaml
+
+WORKDIR /opt/dagster/app
+COPY cool-beans/ .
+
+EXPOSE 4000
+
+CMD ["dagster", "api", "grpc", "--host", "0.0.0.0", "--port", "4000", "-f", "cool_beans/repository.py"]
