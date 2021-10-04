@@ -13,7 +13,7 @@ run_storage:
       hostname:
         env: CLOUD_SQL_HOST
       db_name:
-        env: CLOUD_SQL_DB_NAME
+        env: CLOUD_SQL_DATABASE
       port:
         env: CLOUD_SQL_PORT
 
@@ -29,7 +29,7 @@ event_log_storage:
       hostname:
         env: CLOUD_SQL_HOST
       db_name:
-        env: CLOUD_SQL_DB_NAME
+        env: CLOUD_SQL_DATABASE
       port:
         env: CLOUD_SQL_PORT
 
@@ -45,6 +45,6 @@ schedule_storage:
       hostname:
         env: CLOUD_SQL_HOST
       db_name:
-        env: CLOUD_SQL_DB_NAME
+        env: CLOUD_SQL_DATABASE
       port:
         env: CLOUD_SQL_PORT
