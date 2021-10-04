@@ -17,9 +17,9 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - CLOUD_SQL_USERNAME=${CLOUD_SQL_USERNAME}
-      - CLOUD_SQL_PASSWORD=${CLOUD_SQL_PASSWORD}
-      - CLOUD_SQL_DATABASE=${CLOUD_SQL_DATABASE}
+      - CLOUD_SQL_USERNAME={{CLOUD_SQL_USERNAME}}
+      - CLOUD_SQL_PASSWORD={{CLOUD_SQL_PASSWORD}}
+      - CLOUD_SQL_DATABASE={{CLOUD_SQL_DATABASE}}
       - CLOUD_SQL_PORT=3306
       - CLOUD_SQL_HOST=cloudsql_proxy
     depends_on:
@@ -31,9 +31,9 @@ services:
       - "3000:3000"
     container_name: dagit
     environment:
-      - CLOUD_SQL_USERNAME=${CLOUD_SQL_USERNAME}
-      - CLOUD_SQL_PASSWORD=${CLOUD_SQL_PASSWORD}
-      - CLOUD_SQL_DATABASE=${CLOUD_SQL_DATABASE}
+      - CLOUD_SQL_USERNAME={{CLOUD_SQL_USERNAME}}
+      - CLOUD_SQL_PASSWORD={{CLOUD_SQL_PASSWORD}}
+      - CLOUD_SQL_DATABASE={{CLOUD_SQL_DATABASE}}
       - CLOUD_SQL_PORT=3306
       - CLOUD_SQL_HOST=cloudsql_proxy
     depends_on:
@@ -47,9 +47,9 @@ services:
       restart_policy:
         condition: on-failure
     environment:
-      - CLOUD_SQL_USERNAME=${CLOUD_SQL_USERNAME}
-      - CLOUD_SQL_PASSWORD=${CLOUD_SQL_PASSWORD}
-      - CLOUD_SQL_DATABASE=${CLOUD_SQL_DATABASE}
+      - CLOUD_SQL_USERNAME={{CLOUD_SQL_USERNAME}}
+      - CLOUD_SQL_PASSWORD={{CLOUD_SQL_PASSWORD}}
+      - CLOUD_SQL_DATABASE={{CLOUD_SQL_DATABASE}}
       - CLOUD_SQL_PORT=3306
       - CLOUD_SQL_HOST=cloudsql_proxy
     depends_on:
