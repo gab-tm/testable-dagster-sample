@@ -24,7 +24,7 @@ steps:
       - "--dockerfile=Dockerfile-compose"
       - "--context=dir:///workspace"
       - "--destination=gcr.io/$PROJECT_ID/dagster-compose"
-      - "--cache=true"
+      - "--cache=false"
   - id: deploy-dagster
     waitFor: ['build-dagster', 'build-pipelines', 'build-dagster-compose']
     name: gcr.io/cloud-builders/gcloud
