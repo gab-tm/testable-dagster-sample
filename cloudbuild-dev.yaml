@@ -5,7 +5,7 @@ steps:
     args:
     - "--context=dir:///workspace"
     - "--dockerfile=Dockerfile-dagster-dev"
-    - "--destination=gcr.io/tm-dw-sandbox/dagster"
+    - "--destination=gcr.io/$PROJECT_ID/dagster"
     - "--cache=true"
 
   - id: build-pipelines
@@ -14,7 +14,7 @@ steps:
     args:
     - "--context=dir:///workspace"
     - "--dockerfile=Dockerfile-pipelines-dev"
-    - "--destination=gcr.io/tm-dw-sandbox/dagster-pipelines"
+    - "--destination=gcr.io/$PROJECT_ID/dagster-pipelines"
     - "--cache=true"
 
   - id: build-dagster-compose
@@ -23,7 +23,7 @@ steps:
     args:
       - "--dockerfile=Dockerfile-compose"
       - "--context=dir:///workspace"
-      - "--destination=us.gcr.io/tm-dw-sandbox/dagster-compose"
+      - "--destination=us.gcr.io/$PROJECT_ID/dagster-compose"
       - "--cache=true"
   - id: deploy-dagster
     waitFor: ['build-dagster', 'build-pipelines', 'build-dagster-compose']
@@ -48,4 +48,4 @@ steps:
         --env CLOUD_SQL_USERNAME=$_CLOUD_SQL_USERNAME \
         --env CLOUD_SQL_PASSWORD=$_CLOUD_SQL_PASSWORD \
         --env CLOUD_SQL_DATABASE=$_CLOUD_SQL_DATABASE
-        us.gcr.io/$PROJECT_ID/airflow-compose-dev
+        gcr.io/$PROJECT_ID/dagster-compose
