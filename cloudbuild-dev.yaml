@@ -47,5 +47,5 @@ steps:
         --env CLOUD_SQL_INSTANCE=$_CLOUD_SQL_INSTANCE \
         --env CLOUD_SQL_USERNAME=$_CLOUD_SQL_USERNAME \
         --env CLOUD_SQL_PASSWORD=$_CLOUD_SQL_PASSWORD \
-        --env CLOUD_SQL_DATABASE=$_CLOUD_SQL_DATABASE
+        --env CLOUD_SQL_DATABASE=$_CLOUD_SQL_DATABASE \
         gcr.io/$PROJECT_ID/dagster-compose
