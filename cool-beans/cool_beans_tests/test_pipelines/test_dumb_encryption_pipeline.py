@@ -8,5 +8,5 @@ def test_my_pipeline():
     assert result.success
     assert (
         result.output_for_solid("leet")
-        == "4_v3rY_L0Ng_57r1nG_W17h_n0_5p4c35_4Nd_5P3C14l_cH4R4C73r5_C0N51d3r3d_45_0n3_W0Rd"
+        == "4 v3rY L0Ng 57r1nG W17h n0 5p4c35 4Nd 5P3C14l cH4R4C73r5 C0N51d3r3d 45 0n3 W0Rd."
     )
