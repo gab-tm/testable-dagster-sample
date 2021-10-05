@@ -17,16 +17,22 @@ steps:
     - "--destination=gcr.io/$PROJECT_ID/dagster-pipelines"
     - "--cache=true"
 
+  - id: test-pipelines
+    waitFor: ["build-pipelines"]
+    name: gcr.io/cloud-builders/docker
+    args: ['run', 'gcr.io/$PROJECT_ID/dagster-pipelines', 'pytest cool_beans_tests/']
+
   - id: build-dagster-compose
-    waitFor: ["build-dagster", "build-pipelines"]
+    waitFor: ["build-dagster", "build-pipelines", "test-pipelines"]
     name: gcr.io/kaniko-project/executor:latest
     args:
       - "--dockerfile=Dockerfile-compose"
       - "--context=dir:///workspace"
       - "--destination=gcr.io/$PROJECT_ID/dagster-compose"
       - "--cache=false"
+
   - id: deploy-dagster
-    waitFor: ['build-dagster', 'build-pipelines', 'build-dagster-compose']
+    waitFor: ['build-dagster', 'build-pipelines', 'build-dagster-compose', 'test-pipelines']
     name: gcr.io/cloud-builders/gcloud
     args:
     - compute
