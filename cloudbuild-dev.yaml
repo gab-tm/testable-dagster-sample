@@ -49,3 +49,4 @@ steps:
         --env CLOUD_SQL_PASSWORD=$_CLOUD_SQL_PASSWORD \
         --env CLOUD_SQL_DATABASE=$_CLOUD_SQL_DATABASE \
         gcr.io/$PROJECT_ID/dagster-compose
+      docker image prune
