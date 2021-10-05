@@ -38,9 +38,9 @@ steps:
     - |
       sudo usermod -aG docker $$USER
       docker-credential-gcr configure-docker
-      docker pull gcr.io/$PROJECT_ID/dagster
-      docker pull gcr.io/$PROJECT_ID/dagster-pipelines
-      docker pull gcr.io/$PROJECT_ID/dagster-compose
+      docker pull gcr.io/$PROJECT_ID/dagster:latest
+      docker pull gcr.io/$PROJECT_ID/dagster-pipelines:latest
+      docker pull gcr.io/$PROJECT_ID/dagster-compose:latest
       docker run --rm \
         -v /var/run/docker.sock:/var/run/docker.sock \
         --env PROJECT_ID=$PROJECT_ID \
