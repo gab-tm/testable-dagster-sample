@@ -20,7 +20,7 @@ steps:
   - id: test-pipelines
     waitFor: ["build-pipelines"]
     name: gcr.io/cloud-builders/docker
-    args: ['run', 'gcr.io/$PROJECT_ID/dagster-pipelines', 'pytest cool_beans_tests/']
+    args: ['run', 'gcr.io/$PROJECT_ID/dagster-pipelines', 'pytest', 'cool_beans_tests/']
 
   - id: build-dagster-compose
     waitFor: ["build-dagster", "build-pipelines", "test-pipelines"]
