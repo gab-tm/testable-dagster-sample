@@ -41,15 +41,11 @@ steps:
       docker pull gcr.io/$PROJECT_ID/dagster
       docker pull gcr.io/$PROJECT_ID/dagster-pipelines
       docker pull gcr.io/$PROJECT_ID/dagster-compose
-      echo ${_CLOUD_SQL_INSTANCE}
-      echo ${_CLOUD_SQL_USERNAME}
-      echo ${_CLOUD_SQL_PASSWORD}
-      echo ${_CLOUD_SQL_DATABASE}
       docker run --rm \
         -v /var/run/docker.sock:/var/run/docker.sock \
         --env PROJECT_ID=$PROJECT_ID \
-        --env CLOUD_SQL_INSTANCE=$$_CLOUD_SQL_INSTANCE \
-        --env CLOUD_SQL_USERNAME=$$_CLOUD_SQL_USERNAME \
-        --env CLOUD_SQL_PASSWORD=$$_CLOUD_SQL_PASSWORD \
-        --env CLOUD_SQL_DATABASE=$$_CLOUD_SQL_DATABASE \
+        --env CLOUD_SQL_INSTANCE=$_CLOUD_SQL_INSTANCE \
+        --env CLOUD_SQL_USERNAME=$_CLOUD_SQL_USERNAME \
+        --env CLOUD_SQL_PASSWORD=$_CLOUD_SQL_PASSWORD \
+        --env CLOUD_SQL_DATABASE=$_CLOUD_SQL_DATABASE \
         gcr.io/$PROJECT_ID/dagster-compose
