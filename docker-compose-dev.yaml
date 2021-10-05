@@ -6,7 +6,7 @@ services:
     image: gcr.io/cloudsql-docker/gce-proxy:1.14
     command:
       - "/cloud_sql_proxy"
-      - "-instances={{CLOUD_SQL_INSTANCE}}=tcp:0.0.0.0:3306"
+      - "-instances=tm-dw-sandbox:us-central1:testable-dagster-postgres-6618aa84=tcp:0.0.0.0:3306"
       - "ip_address_types=PRIVATE"
     ports:
       - "3306:3306"
