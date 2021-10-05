@@ -17,4 +17,5 @@ COPY cool-beans/ .
 
 EXPOSE 4000
 
-CMD ["dagster", "api", "grpc", "--host", "0.0.0.0", "--port", "4000", "-f", "cool_beans/repository.py"]
+CMD ["echo", "hehe world"]
+# CMD ["dagster", "api", "grpc", "--host", "0.0.0.0", "--port", "4000", "-f", "cool_beans/repository.py"]
