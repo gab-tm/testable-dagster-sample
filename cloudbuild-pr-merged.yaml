@@ -30,3 +30,29 @@ steps:
       - "--context=dir:///workspace"
       - "--destination=gcr.io/$PROJECT_ID/dagster-compose"
       - "--cache=false"
+
+  - id: deploy-dagster
+    waitFor: ['test-pipelines']
+    name: gcr.io/cloud-builders/gcloud
+    args:
+    - compute
+    - ssh
+    - '--zone=us-central1-a'
+    - '--ssh-key-expire-after=5m'
+    - 'dagster@testable-dagster'
+    - '--'
+    - |
+      sudo usermod -aG docker $$USER
+      docker-credential-gcr configure-docker
+      docker pull gcr.io/$PROJECT_ID/dagster:latest
+      docker pull gcr.io/$PROJECT_ID/dagster-pipelines:latest
+      docker pull gcr.io/$PROJECT_ID/dagster-compose:latest
+      docker run --rm \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        --env PROJECT_ID=$PROJECT_ID \
+        --env CLOUD_SQL_INSTANCE=$_CLOUD_SQL_INSTANCE \
+        --env CLOUD_SQL_USERNAME=$_CLOUD_SQL_USERNAME \
+        --env CLOUD_SQL_PASSWORD=$_CLOUD_SQL_PASSWORD \
+        --env CLOUD_SQL_DATABASE=$_CLOUD_SQL_DATABASE \
+        gcr.io/$PROJECT_ID/dagster-compose
+      docker image prune --force
