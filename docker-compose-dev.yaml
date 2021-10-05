@@ -1,0 +1,57 @@
+version: "3"
+
+services:
+  cloudsql_proxy:
+    container_name: cloudsql_proxy
+    image: gcr.io/cloudsql-docker/gce-proxy:1.14
+    command:
+      - "/cloud_sql_proxy"
+      - "-instances=${CLOUD_SQL_INSTANCE}=tcp:0.0.0.0:3306"
+      - "ip_address_types=PRIVATE"
+    ports:
+      - "3306:3306"
+    restart: always
+  pipelines:
+    image: gcr.io/tm-dw-sandbox/dagster-pipelines
+    container_name: dumb_password_generator_pipelines
+    ports:
+      - "4000:4000"
+    environment:
+      - CLOUD_SQL_USERNAME=${CLOUD_SQL_USERNAME}
+      - CLOUD_SQL_PASSWORD=${CLOUD_SQL_PASSWORD}
+      - CLOUD_SQL_DATABASE=${CLOUD_SQL_DATABASE}
+      - CLOUD_SQL_PORT=3306
+      - CLOUD_SQL_HOST=cloudsql_proxy
+    depends_on:
+      - cloudsql_proxy
+  dagit:
+    image: gcr.io/${PROJECT_ID}/dagster
+    command: dagit --host 0.0.0.0 --port 3000 -w workspace.yaml
+    ports:
+      - "3000:3000"
+    container_name: dagit
+    environment:
+      - CLOUD_SQL_USERNAME=${CLOUD_SQL_USERNAME}
+      - CLOUD_SQL_PASSWORD=${CLOUD_SQL_PASSWORD}
+      - CLOUD_SQL_DATABASE=${CLOUD_SQL_DATABASE}
+      - CLOUD_SQL_PORT=3306
+      - CLOUD_SQL_HOST=cloudsql_proxy
+    depends_on:
+      - cloudsql_proxy
+      - pipelines
+  daemon:
+    image: gcr.io/${PROJECT_ID}/dagster
+    command: dagster-daemon run
+    container_name: daemon
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      - CLOUD_SQL_USERNAME=${CLOUD_SQL_USERNAME}
+      - CLOUD_SQL_PASSWORD=${CLOUD_SQL_PASSWORD}
+      - CLOUD_SQL_DATABASE=${CLOUD_SQL_DATABASE}
+      - CLOUD_SQL_PORT=3306
+      - CLOUD_SQL_HOST=cloudsql_proxy
+    depends_on:
+      - cloudsql_proxy
+      - pipelines

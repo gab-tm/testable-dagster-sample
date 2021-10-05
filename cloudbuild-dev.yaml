@@ -1,0 +1,32 @@
+steps:
+  - id: build-dagster
+    waitFor: ["-"]
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+    - "--context=dir:///workspace"
+    - "--dockerfile=Dockerfile-dagster-dev"
+    - "--destination=gcr.io/$PROJECT_ID/dagster"
+    - "--cache=true"
+
+  - id: build-pipelines
+    waitFor: ["-"]
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+    - "--context=dir:///workspace"
+    - "--dockerfile=Dockerfile-pipelines-dev"
+    - "--destination=gcr.io/$PROJECT_ID/dagster-pipelines"
+    - "--cache=true"
+
+  - id: test-pipelines
+    waitFor: ["build-pipelines"]
+    name: docker
+    args: ['run', 'gcr.io/$PROJECT_ID/dagster-pipelines', 'pytest', 'cool_beans_tests/']
+
+  - id: build-dagster-compose
+    waitFor: ["build-dagster", "build-pipelines", "test-pipelines"]
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+      - "--dockerfile=Dockerfile-compose"
+      - "--context=dir:///workspace"
+      - "--destination=gcr.io/$PROJECT_ID/dagster-compose"
+      - "--cache=false"

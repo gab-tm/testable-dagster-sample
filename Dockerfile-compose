@@ -1,0 +1,11 @@
+FROM docker/compose:1.24.0
+
+# Setup docker-credential-gcr so we don't have to copy the JSON keyfile to Docker Compose
+RUN wget -O docker-credential-gcr.tar.gz "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v2.0.0/docker-credential-gcr_linux_amd64-2.0.0.tar.gz"; \
+    tar -xzf docker-credential-gcr.tar.gz; \
+    mv docker-credential-gcr /usr/local/bin/docker-credential-gcr; \
+    chmod +x /usr/local/bin/docker-credential-gcr
+
+COPY . /dagster
+WORKDIR /dagster
+ENTRYPOINT ["sh", "entrypoint.sh"]

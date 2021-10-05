@@ -9,7 +9,8 @@ module "testable_dagster_service_account" {
     # "${var.google_project}=>roles/bigquery.jobUser",
     # "${var.google_project}=>roles/bigquery.readSessionUser",
     # "${var.google_project}=>roles/secretmanager.secretAccessor",
-    # "${var.google_project}=>roles/storage.admin"
+    "${var.google_project}=>roles/storage.admin"
+
   ]
   display_name = "Testable Dagster Pipeline Service Account"
   description  = "Service account for the Testable Dagster Pipeline"
