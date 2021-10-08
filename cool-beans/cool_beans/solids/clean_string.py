@@ -1,7 +1,7 @@
 from dagster import solid
 import re
 
-ALPHA_NUMERIC_PATTERN = r'[^a-zA-Z0-9_]'
+ALPHA_NUMERIC_PATTERN = r'[^a-zA-Z0-9_\s\.]'
 
 
 @solid
