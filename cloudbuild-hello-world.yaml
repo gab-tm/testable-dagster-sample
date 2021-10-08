@@ -1,0 +1,5 @@
+steps:
+  - id: hello-world
+    waitFor: ["-"]
+    name: bash
+    args: ["echo", "Hello World!"]
